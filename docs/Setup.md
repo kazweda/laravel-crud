@@ -31,3 +31,6 @@ mailpitサービスを使用して、実際のメールサーバーではなく�
 ```
 sail php artisan make:notification ResetPasswordNotification
 ```
+
+## レイアウトの共通化
+[【Laravel】レイアウトの共通化、コンポーネント、スロットの使い方](https://zenn.dev/nenenemo/articles/e09fd01c0a3a47)
