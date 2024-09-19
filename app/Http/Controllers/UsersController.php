@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Http\Requests\User\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +28,7 @@ class UsersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         try {
             // トランザクションを開始
@@ -47,12 +48,12 @@ class UsersController extends Controller
             // トランザクションをコミット
             DB::commit();
 
-            return view('users.create', compact('user'));
+            return view('users.create', compact('user'))->with('message', '登録が完了しました！');
         } catch (Exception $e) {
             // トランザクションをロールバック
             DB::rollBack();
 
-            return redirect()->route('users.create')->with('message', '登録に失敗しました。' . $e->getMessage());
+            return back()->with('message', '登録に失敗しました。' . $e->getMessage());
         }
     }
 
