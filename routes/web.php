@@ -15,12 +15,14 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::group(['prefix' => 'users', 'as' => 'users.', 'middleware' => 'auth'], function () {
-    // Route::get('/create', [UsersController::class, 'create'])->name('create');
-    // Route::post('/store', [UsersController::class, 'store'])->name('store');
+
     Route::get('/', [UsersController::class, 'index'])->name('index');
     Route::get('/create', [UsersController::class, 'create'])->name('create');
     Route::post('/store', [UsersController::class, 'store'])->name('store');
-    Route::get('/{id}', [UsersController::class, 'show'])->name('show');
+    Route::get('/{user}', [UsersController::class, 'show'])->name('show');
+    Route::get('/{user}/edit', [UsersController::class, 'edit'])->name('edit');
+    Route::put('/{user}', [UsersController::class, 'update'])->name('update');
+
 });
 
 Route::middleware('auth')->group(function () {

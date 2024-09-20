@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Requests\User\UserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -61,9 +62,8 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(User $user)
     {
-        $user = User::find($id);
         return view('users.show', compact('user'));
     }
 
@@ -72,15 +72,39 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return view('users.edit', compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $data = $request->validated();
+
+        $passwordChanged = false; // パスワードが変更されたかどうかのフラグ
+
+        // パスワードが入力されている場合のみ更新
+        if (!empty($data['password'])) {
+            $passwordChanged = true;
+        } else {
+            unset($data['password']); // パスワードフィールドをデータ配列から削除
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $user->update($data);
+
+            DB::commit();
+
+            return
+                redirect()->route('users.edit', $user->id)->with(compact('user', 'passwordChanged'));;
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            return back()->with(['message' => '更新中にエラーが発生しました。' . $e->getMessage()]);
+        }
     }
 
     /**
