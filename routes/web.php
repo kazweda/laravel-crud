@@ -22,6 +22,7 @@ Route::group(['prefix' => 'users', 'as' => 'users.', 'middleware' => 'auth'], fu
     Route::get('/{user}', [UsersController::class, 'show'])->name('show');
     Route::get('/{user}/edit', [UsersController::class, 'edit'])->name('edit');
     Route::put('/{user}', [UsersController::class, 'update'])->name('update');
+    Route::delete('/{user}', [UsersController::class, 'destroy'])->name('destroy');
 
 });
 

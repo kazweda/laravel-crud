@@ -11,10 +11,10 @@
         ユーザー登録
     </a>
 
-           <!-- セッションメッセージ -->
-            @if (session('message'))
-                <div><strong>{{ session('message') }}</strong></div>
-            @endif
+    <!-- セッションメッセージ -->
+    @if (session('message'))
+        <div><strong>{{ session('message') }}</strong></div>
+    @endif
 
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
@@ -26,17 +26,25 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @foreach ($users as $user)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $user->id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap"><a href="{{ route('users.show', $user->id) }}"
-                                class="text-blue-500 hover:underline">{{ $user->name }}</a></td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <a href="{{ route('users.edit', $user->id) }}"
-                                class="text-indigo-600 hover:text-indigo-900">編集</a>
-                        </td>
-                    </tr>
-                @endforeach
+                @if (isset($users))
+                    @foreach ($users as $user)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $user->id }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap"><a href="{{ route('users.show', $user->id) }}"
+                                    class="text-blue-500 hover:underline">{{ $user->name }}</a></td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <a href="{{ route('users.edit', $user->id) }}"
+                                    class="text-indigo-600 hover:text-indigo-900">編集</a>
+                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-900 ml-20"
+                                        onclick="return confirm('本当に削除しますか？')">削除</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
     </div>

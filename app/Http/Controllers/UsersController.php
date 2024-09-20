@@ -112,6 +112,11 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        try {
+            $user->delete();
+            return redirect()->route('users.index')->with('message', 'ユーザーが削除されました');
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('message', 'ユーザーの削除中にエラーが発生しました: ' . $e->getMessage());
+        }
     }
 }
