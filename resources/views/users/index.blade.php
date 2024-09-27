@@ -23,29 +23,39 @@
                     <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                     <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">名前</th>
                     <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                    <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @if (isset($users))
                     @foreach ($users as $user)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $user->id }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap"><a href="{{ route('users.show', $user->id) }}"
+                            <td class="px-6 py-2 whitespace-nowrap">{{ $user->id }}</td>
+                            <td class="px-6 py-2 whitespace-nowrap"><a href="{{ route('users.show', $user->id) }}"
                                     class="text-blue-500 hover:underline">{{ $user->name }}</a></td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-6 py-2 whitespace-nowrap">
                                 <a href="{{ route('users.edit', $user->id) }}"
                                     class="text-indigo-600 hover:text-indigo-900">編集</a>
-                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 ml-20"
-                                        onclick="return confirm('本当に削除しますか？')">削除</button>
-                                </form>
+                                @can('admin', $authUser)
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900 ml-20"
+                                            onclick="return confirm('本当に削除しますか？')">削除</button>
+                                    </form>
+                                </td>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach
                 @endif
             </tbody>
         </table>
+
+        <!-- ページネーションリンク -->
+        <div class="mt-4">
+            {{ $users->links() }}
+        </div>
     </div>
 @endsection
