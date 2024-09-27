@@ -17,7 +17,7 @@
         @include('layouts.header')
     </header>
 
-    <main>
+    <main class="px-4 py-4">
         @yield('content')
     </main>
 

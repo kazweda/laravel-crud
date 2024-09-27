@@ -6,8 +6,7 @@
     <h1 class="text-2xl font-bold mb-4">ユーザー一覧</h1>
 
     <!-- ユーザー登録ページへのリンク -->
-    <a href="{{ route('users.create') }}"
-        class="mb-4 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    <a class="mb-4 inline-block bg-gray-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" href="{{ route('users.create') }}">
         ユーザー登録
     </a>
 
@@ -16,7 +15,7 @@
         <div><strong>{{ session('message') }}</strong></div>
     @endif
 
-    <div class="overflow-x-auto">
+    <div class="mt-4 overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead>
                 <tr>
