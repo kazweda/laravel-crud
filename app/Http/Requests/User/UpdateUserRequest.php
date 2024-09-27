@@ -23,13 +23,18 @@ class UpdateUserRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users')->ignore($userId), // 重複チェックで自分のメールアドレスを除外
+                Rule::unique('users')->ignore($userId)->whereNull('deleted_at'),
             ],
+            'image' => [
+                'image',
+                'max:1024',
+                'mimes:jpg,png',
+            ],
+            'is_admin' => 'required|string|max:10',
         ];
 
-        // パスワードが入力されている場合にのみ、パスワードのバリデーションルールを適用
         if (!empty($this->input('password'))) {
-            $rules['password'] = ['string', 'min:8', 'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])/',];
+            $rules['password'] = ['sometimes', 'required', 'string', 'min:8', 'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])/', 'confirmed'];
         }
 
         return $rules;

@@ -22,9 +22,21 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => ['required', 'string', 'min:8', 'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])/',],
+            'name' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->whereNull('deleted_at'),
+            ],
+            'password' => ['required', 'string', 'min:8', 'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])/', 'confirmed'],
+            'image' => [
+                'image',
+                'max:1024',
+                'mimes:jpg,png',
+            ],
+            'is_admin' => 'nullable|string|max:10',
         ];
     }
 
